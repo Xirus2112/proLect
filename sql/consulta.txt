@@ -1,0 +1,34 @@
+SELECT
+	b.vcciclo,
+	b.vcruta Ruta ,
+	a.vcparam Itinerario,
+	naol,
+	a.vcnisrad nic,
+	a.vcnic nis,
+	nconsecutivo orden,
+	TO_DATE(to_char(trunc(tsfec_lectura), 'DD/MM/YYYY'), 'DD/MM/YYYY')TSFEC_LECTURA,
+	a.nlec,
+	a.vccoan,
+	tipo_energia,
+	(CASE
+		a.lti_foto WHEN 1 THEN 'SI'
+		ELSE 'NO'
+	END) AS foto,
+	(CASE
+		nstatus WHEN 0 THEN 'Asignada'
+		WHEN 1 THEN 'Legalizada'
+		WHEN 2 THEN 'Rechazada'
+	END) EstadoOrden
+FROM
+	s_lecturas a
+INNER JOIN status b ON
+	(a.npericons = b.npericons
+		AND a.vctipo = b.vctipo
+		AND a.vcparam = b.vcparam )
+WHERE
+	a.npericons = 202211
+	and rownum < 10
+ORDER BY
+	b.vcciclo,
+	a.vcparam,
+	nconsecutivo
